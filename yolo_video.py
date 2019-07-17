@@ -3,9 +3,15 @@ import argparse
 from yolo import YOLO, detect_video
 from PIL import Image
 
+
+
 def detect_img(yolo):
-    while True:
-        img = input('Input image filename:')
+    file_in = open('input_images.txt')
+    images_list = file_in.readlines()
+    for img in images_list:
+        # img = input('Input image filename:')
+        img = img[:-1]
+        print(img)
         try:
             image = Image.open(img)
         except:

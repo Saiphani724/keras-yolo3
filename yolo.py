@@ -18,6 +18,8 @@ from yolo3.utils import letterbox_image
 import os
 from keras.utils import multi_gpu_model
 
+
+
 class YOLO(object):
     _defaults = {
         "model_path": 'model_data/yolo.h5',
@@ -125,7 +127,8 @@ class YOLO(object):
             })
 
         print('Found {} boxes for {}'.format(len(out_boxes), 'img'))
-
+        file1 = open("output.txt","a")
+        file1.write('img\n')
         font = ImageFont.truetype(font='font/FiraMono-Medium.otf',
                     size=np.floor(3e-2 * image.size[1] + 0.5).astype('int32'))
         thickness = (image.size[0] + image.size[1]) // 300
@@ -144,8 +147,11 @@ class YOLO(object):
             left = max(0, np.floor(left + 0.5).astype('int32'))
             bottom = min(image.size[1], np.floor(bottom + 0.5).astype('int32'))
             right = min(image.size[0], np.floor(right + 0.5).astype('int32'))
-            print(label, (left, top), (right, bottom))
-
+            # print(label, (left, top), (right, bottom))
+            output = "{} {} {} {} {}\n".format(label,left,top,right,bottom)
+            print(output,end='')
+            file1.write(output)
+            
             if top - label_size[1] >= 0:
                 text_origin = np.array([left, top - label_size[1]])
             else:
@@ -163,7 +169,8 @@ class YOLO(object):
             del draw
 
         end = timer()
-        print(end - start)
+        print(end - start,'here')
+        file1.close()
         return image
 
     def close_session(self):
@@ -171,6 +178,7 @@ class YOLO(object):
 
 def detect_video(yolo, video_path, output_path=""):
     import cv2
+    
     vid = cv2.VideoCapture(video_path)
     if not vid.isOpened():
         raise IOError("Couldn't open webcam or video")
