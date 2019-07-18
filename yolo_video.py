@@ -11,6 +11,7 @@ def detect_img(yolo):
     for img in images_list:
         # img = input('Input image filename:')
         img = img[:-1]
+        img = '../../input/open-images-2019-object-detection/test/' + img
         print(img)
         try:
             image = Image.open(img)
